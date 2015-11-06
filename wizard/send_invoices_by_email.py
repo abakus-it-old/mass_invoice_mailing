@@ -15,8 +15,9 @@ class account_invoice_mass_mailing(osv.osv_memory):
         template_ids = email_template_obj.search(cr, uid, [('name', '=','Invoice - Send by Email')], context=context)
         
         if template_ids:
-            for invoice_id in active_ids:
-                email_template_obj.send_mail(cr, uid, template_ids[0], invoice_id, force_send=True)
-                account_invoice_obj.write(cr, uid, invoice_id, {'sent':True})
+            for invoice in account_invoice_obj.browse(cr, uid, active_ids, context=context):
+                if invoice.state == 'open' and invoice.sent==False:
+                    email_template_obj.send_mail(cr, uid, template_ids[0], invoice.id, force_send=True)
+                    invoice.sent = True
                 
         return {'type': 'ir.actions.act_window_close'}

@@ -10,7 +10,7 @@ class account_invoice_mass_mailing(osv.osv_memory):
         active_ids = context.get('active_ids', []) or []
 
         account_invoice_obj = self.pool['account.invoice']
-        email_template_obj = self.pool['email.template']
+        email_template_obj = self.pool['mail.template']
         mail_mail_obj = self.pool['mail.mail']
         template_ids = email_template_obj.search(cr, uid, [('name', '=','Invoice - Send by Email')], context=context)
         
